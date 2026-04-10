@@ -3,9 +3,7 @@ import pandas as pd
 import pymysql
 import plotly.express as px
 
-# ==============================
 # DB CONNECTION HELPERS
-# ==============================
 
 @st.cache_resource
 def get_connection():
@@ -23,9 +21,7 @@ def run_query(sql, params=None):
     return pd.read_sql(sql, conn, params=params)
 
 
-# ==============================
 # PAGE CONFIG
-# ==============================
 
 st.set_page_config(
     page_title="PhonePe Pulse",
@@ -34,10 +30,11 @@ st.set_page_config(
 
 st.title("📊 PhonePe Pulse Dashboard")
 
+st.markdown("""
+### 📌 Project Objective
+This dashboard analyzes PhonePe transaction data to understand user behavior, transaction trends, and insurance adoption across India.""")
 
-# ==============================
 # TAB LAYOUT
-# ==============================
 
 tab_overview, tab_txn, tab_device, tab_ins, tab_market, tab_engagement = st.tabs([
     "🏠 Overview",
@@ -49,9 +46,7 @@ tab_overview, tab_txn, tab_device, tab_ins, tab_market, tab_engagement = st.tabs
 ])
 
 
-# ==============================
-# 🏠 OVERVIEW TAB
-# ==============================
+# OVERVIEW TAB
 
 with tab_overview:
     st.subheader("Project Overview")
@@ -102,12 +97,10 @@ with tab_overview:
         st.metric("Total Registered Users", f"{total_users:,.0f}")
 
 
-# ==============================
-# 💸 TRANSACTION DYNAMICS TAB (SCENARIO 1)
-# ==============================
+# TRANSACTION DYNAMICS TAB (SCENARIO 1)
 
 with tab_txn:
-    st.subheader("Scenario 1 – Decoding Transaction Dynamics")
+    st.subheader("Decoding Transaction Dynamics on PhonePe")
 
     # --- Yearly Trend (All India) ---
     st.markdown("### 🔹 Yearly Transaction Trend (All India)")
@@ -201,13 +194,18 @@ with tab_txn:
     fig_state_bar.update_layout(xaxis_tickangle=-45)
     st.plotly_chart(fig_state_bar, use_container_width=True, key="txn_state_bar")
 
+    st.info("""
+    Transaction volume and value show a consistent upward trend over years, indicating strong growth in digital payment adoption.
+    - Certain payment types (like P2P and merchant payments) contribute the major share of transaction value.
+    - A few states dominate transaction volume, suggesting regional concentration of digital adoption.
+    - Some states show slower growth, indicating potential markets for expansion.
+    """)
 
-# ==============================
-# 📱 DEVICE & ENGAGEMENT TAB (SCENARIO 2)
-# ==============================
+
+# DEVICE & ENGAGEMENT TAB (SCENARIO 2)
 
 with tab_device:
-    st.subheader("Scenario 2 – Device Dominance & User Engagement")
+    st.subheader("Device Dominance & User Engagement Analysis")
 
     # --- Brand Trend Across Years ---
     st.markdown("### 🔹 Mobile Brand Usage Trend Across Years")
@@ -322,14 +320,19 @@ with tab_device:
         )
         fig_low_eng.update_layout(xaxis_tickangle=-45)
         st.plotly_chart(fig_low_eng, use_container_width=True, key="eng_low")
+    
+    st.info("""
+        - A few mobile brands dominate user base, indicating platform optimization should prioritize these devices.
+        - Some states have high registered users but relatively low app opens → low engagement problem.
+        - High engagement ratio states indicate strong user retention and app usage habits.
+        - Device usage patterns vary regionally, suggesting region-specific optimization strategies.
+        """)
 
 
-# ==============================
-# 🛡 INSURANCE INSIGHTS TAB (SCENARIO 3)
-# ==============================
+# INSURANCE INSIGHTS TAB (SCENARIO 3)
 
 with tab_ins:
-    st.subheader("Scenario 3 – Insurance Penetration & Growth Potential")
+    st.subheader("Insurance Penetration & Growth Potential Analysis")
 
     # --- Yearly Insurance Trend ---
     st.markdown("### 🔹 Yearly Insurance Growth (All India)")
@@ -459,13 +462,18 @@ with tab_ins:
         fig_bottom_districts.update_layout(xaxis_tickangle=-45)
         st.plotly_chart(fig_bottom_districts, use_container_width=True, key="ins_bottom_dist")
 
+    st.info("""
+            - Insurance transactions are increasing over time, indicating growing awareness of digital insurance products.
+            - A few states contribute significantly to insurance value → high adoption regions.
+            - Many states show low insurance activity → untapped market opportunity.
+            - District-level variation suggests localized marketing strategies are required.
+            """)
 
-# ==============================
-# 🌍 MARKET EXPANSION TAB (SCENARIO 4)
-# ==============================
+
+# MARKET EXPANSION TAB (SCENARIO 4)
 
 with tab_market:
-    st.subheader("Scenario 4 – Market Expansion Analysis")
+    st.subheader("Transaction Analysis for Market Expansion")
 
     # --- State-Year Summary ---
     df_state_year = run_query("""
@@ -571,13 +579,18 @@ with tab_market:
     )
     st.plotly_chart(fig_matrix, use_container_width=True, key="market_matrix")
 
+    st.info("""
+            - States with high transaction value and growth represent mature markets.
+            - Low-value but high-growth states are ideal targets for expansion.
+            - High-value but low-growth states indicate market saturation.
+            - Low-value and low-growth regions require awareness and infrastructure development.
+            """)
 
-# ==============================
+
 # 👥 USER ENGAGEMENT TAB (SCENARIO 5)
-# ==============================
 
 with tab_engagement:
-    st.subheader("Scenario 5 – User Engagement & Growth Strategy")
+    st.subheader("User Engagement and Growth Strategy")
 
     # --- State-level Registered Users & App Opens ---
     st.markdown("### 🔹 State-wise User Base & Engagement")
@@ -676,3 +689,11 @@ with tab_engagement:
         title="Top 10 Pincodes by User Registrations"
     )
     st.plotly_chart(fig_top_pins, use_container_width=True, key="eng_top_pins")
+
+    st.info(
+        """
+        - Certain states and districts dominate user registrations → key user acquisition regions.
+        - High app opens indicate active engagement and retention.
+        - Some regions show high registrations but low activity → drop-off after onboarding.
+        - Pincode-level hotspots help identify micro-targeting opportunities for marketing."""
+    )
