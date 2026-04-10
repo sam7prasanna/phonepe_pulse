@@ -195,10 +195,10 @@ with tab_txn:
     st.plotly_chart(fig_state_bar, use_container_width=True, key="txn_state_bar")
 
     st.info("""
-    Transaction volume and value show a consistent upward trend over years, indicating strong growth in digital payment adoption.
+    - Transaction volume and value show a consistent upward trend over years, indicating strong growth in digital payment adoption.
     - Certain payment types (like P2P and merchant payments) contribute the major share of transaction value.
-    - A few states dominate transaction volume, suggesting regional concentration of digital adoption.
-    - Some states show slower growth, indicating potential markets for expansion.
+    - Karnataka, Telangana and Maharashtra dominate transaction volume, suggesting regional concentration of digital adoption.
+    - Some states like Jharkhand, Haryana show slower growth, indicating potential markets for expansion.
     """)
 
 
@@ -322,7 +322,7 @@ with tab_device:
         st.plotly_chart(fig_low_eng, use_container_width=True, key="eng_low")
     
     st.info("""
-        - A few mobile brands dominate user base, indicating platform optimization should prioritize these devices.
+        - Mobile brands Xiaomi, Samsung and Vivo dominate user base, indicating platform optimization should prioritize these devices.
         - Some states have high registered users but relatively low app opens → low engagement problem.
         - High engagement ratio states indicate strong user retention and app usage habits.
         - Device usage patterns vary regionally, suggesting region-specific optimization strategies.
@@ -464,8 +464,8 @@ with tab_ins:
 
     st.info("""
             - Insurance transactions are increasing over time, indicating growing awareness of digital insurance products.
-            - A few states contribute significantly to insurance value → high adoption regions.
-            - Many states show low insurance activity → untapped market opportunity.
+            - Karnataka and Maharashtra contribute significantly to insurance value → high adoption regions.
+            - Andaman & Nicobar and Arunachal Pradesh show low insurance activity → untapped market opportunity.
             - District-level variation suggests localized marketing strategies are required.
             """)
 
@@ -580,7 +580,9 @@ with tab_market:
     st.plotly_chart(fig_matrix, use_container_width=True, key="market_matrix")
 
     st.info("""
-            - States with high transaction value and growth represent mature markets.
+            - Lakshadweep is the state with high transaction value and growth represent mature markets.
+            - Telangana state is the Market leader by value.
+            - Expansion opportunity is high in Dadra and Nagar Haveli and Daman and Diu.
             - Low-value but high-growth states are ideal targets for expansion.
             - High-value but low-growth states indicate market saturation.
             - Low-value and low-growth regions require awareness and infrastructure development.
@@ -681,6 +683,8 @@ with tab_engagement:
         ORDER BY total_registrations DESC;
     """)
 
+    df_top_reg["pincode"] = df_top_reg["pincode"].astype(int).astype(str)
+
     fig_top_pins = px.bar(
         df_top_reg.head(10),
         x="pincode",
@@ -688,11 +692,13 @@ with tab_engagement:
         color="state",
         title="Top 10 Pincodes by User Registrations"
     )
+    fig_top_pins.update_xaxes(type='category')
+    
     st.plotly_chart(fig_top_pins, use_container_width=True, key="eng_top_pins")
 
     st.info(
         """
-        - Certain states and districts dominate user registrations → key user acquisition regions.
+        - Maharashtra among the states and Bengaluru Urban among the districts dominate user registrations & engagement → key user acquisition regions.
         - High app opens indicate active engagement and retention.
         - Some regions show high registrations but low activity → drop-off after onboarding.
         - Pincode-level hotspots help identify micro-targeting opportunities for marketing."""
